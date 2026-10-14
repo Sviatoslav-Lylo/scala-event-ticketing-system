@@ -31,12 +31,11 @@ class EventManager(
   ): Either[DomainError, (EventManager, Ticket)] = {
 
     val eventOpt = findEvent(eventId)
-
     val participantOpt = participants.find(_.id == participantId)
+
     (eventOpt, participantOpt) match {
       case (None, _) => Left(EventNotFound(eventId))
-      case (_, None) =>
-        Left(InvalidData(s"Учасника $participantId не знайдено"))
+      case (_, None) => Left(InvalidData(s"Учасника $participantId не знайдено"))
       case (Some(event), Some(participant)) =>
         if (!event.isAvailable) {
           Left(SoldOut(eventId))
@@ -45,18 +44,15 @@ class EventManager(
 
             val ticketId = s"T-${tickets.length + 1}"
 
-            val ticket =
-              Ticket(ticketId, eventId, participantId, tier, finalPrice)
+            val ticket = Ticket(ticketId, eventId, participantId, tier, finalPrice)
     
             val updatedEvents = events.map {
-              case e if e.id == eventId =>
-                e.copy(soldTickets = e.soldTickets :+ ticket)
+              case e if e.id == eventId => e.copy(soldTickets = e.soldTickets :+ ticket)
               case e => e
             }
     
             val updatedParticipants = participants.map {
-              case p if p.id == participantId =>
-                p.copy(tickets = p.tickets :+ ticket)
+              case p if p.id == participantId => p.copy(tickets = p.tickets :+ ticket)
               case p => p
             }
     
