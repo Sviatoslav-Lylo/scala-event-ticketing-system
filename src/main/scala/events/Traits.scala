@@ -24,5 +24,5 @@ trait VipMarkup extends PriceCalculator {
 
 trait ServiceFee extends PriceCalculator {
   abstract override def calculatePrice(basePrice: Double): Double = 
-    super.calculatePrice(basePrice) + 50.0 // Фіксований сервісний збір платформи
+    super.calculatePrice(basePrice) + 50.0 // фіксований збір
 }
