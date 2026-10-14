@@ -34,6 +34,7 @@ class EventManager(
     val participantOpt = participants.find(_.id == participantId)
 
     (eventOpt, participantOpt) match {
+      case (None, None) => Left(InvalidData("Помилка: не знайдено ані події, ані учасника."))
       case (None, _) => Left(EventNotFound(eventId))
       case (_, None) => Left(InvalidData(s"Учасника $participantId не знайдено"))
       case (Some(event), Some(participant)) =>

@@ -1,7 +1,7 @@
 package events
 
 @main def runApp(): Unit = {
-  println("=== Ініціалізація Системи Управління Подіями ===")
+  println("=== Ініціалізація cистеми управління подіями ===")
 
   val initialSystem = new EventManager()
 
@@ -36,7 +36,7 @@ package events
   val finalSystem = purchaseResult match {
     case Right((newManager, ticket)) =>
       println(s"Квиток ${ticket.id} успішно придбано.")
-      println(s"Розрахована ціна (1000 + збір 50 - знижка 20%): ${ticket.finalPrice} грн.")
+      println(s"Розрахована ціна (1000 - знижка 20% + збір 50): ${ticket.finalPrice} грн.")
       newManager
     case Left(error) =>
       println(s"Відмова у купівлі: $error")
