@@ -1,0 +1,21 @@
+# Scala build tools
+.bsp/
+.bloop/
+.metals/
+.scala-build/
+target/
+project/target/
+project/project/
+
+# Compiled Java/Scala classes
+*.class
+*.tasty
+
+# IDE files
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
