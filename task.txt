@@ -1,0 +1,89 @@
+Лабораторна Робота №4
+Умови завершення
+Початок приймання: вівторок 8 вересня 2026 00:00 AM
+Термін спливає: четвер 26 листопада 2026 18:00 PM
+Мета роботи: Засвоєння принципів функційного програмування та синтез їх з об’єктно-орієнтованим підходом у мовах програмування. Формування навичок розробки типізованих структур (класів, об’єктів, трейтів) для різних предметних областей та застосування принципів функційного програмування у вирішенні задач.
+
+Завдання:
+
+Реалізувати модель предметної області за допомогою об’єктно-орієнтованих компонентів Scala:
+
+створювати класи із конструктором (primary та secondary constructors);
+використовувати case-класи для представлення сутностей;
+визначити трейти для базових елементів, які можна розширити у класах;
+створити об'єкти (singleton objects) для представлення глобальних даних або утиліт.
+Використовувати функційні принципи:
+
+Створіть методи, які будуть чистими (без побічних ефектів, із однаковим результатом для однакових вхідних даних);
+Реалізуйте операції над даними за допомогою map, flatMap, filter, fold;
+Дотримуйтесь іммутабельності — усі дані повинні бути змінюваними лише через створення нових екземплярів класів;
+Використовуйте конструкції Option, Either або Try для обробки відсутніх значень або помилок.
+Треба використати Інтерполяція трейтів (Trait Linearization), sealed класи, обєкти компаніони. 
+Загалом програма має вирішувати якусь нормальну задачу, а не щось тривіальне.
+
+Покроковий приклад: Система для бібліотеки (Сама робота повинна містити більше можливостей для системи, це лише невеличкий приклад :) )
+
+Аналіз предметної області. 
+Розробіть структуру даних, базуючись на обраній предметній області:
+Читач: ім’я, ID, список взятих книг;
+Книга: назва, автор, унікальний ID, доступність (взято чи доступна);
+Бібліотека: список книг, функції видачі/повернення книг, пошук книг;
+Журнал операцій: історія всіх заявок на книги.
+Визначення класів і трейтів
+Створіть трейт, який об'єднує спільні характеристики базових сутностей.
+trait Identifiable {
+  val id: String
+}
+Створіть case-класи для представлення сутностей по предметній області.
+case class Book(id: String, title: String, author: String, isAvailable: Boolean)
+case class Reader(id: String, name: String, borrowedBooks: List[Book])
+Використовуйте класи зі звичайними конструкторами для більш складних об'єктів.
+class Library(val books: List[Book]) {
+  def addBook(book: Book): Library = new Library(books :+ book)
+}
+Додайте об’єкти для утиліт або статичних даних
+object LibraryUtils {
+  def findAvailableBooks(library: Library): List[Book] = 
+    library.books.filter(_.isAvailable)
+}
+Реалізація функцій логіки
+Реалізуйте функції без var та без побічних ефектів.
+def findBookByTitle(library: Library, title: String): Option[Book] = 
+  library.books.find(_.title == title)
+Використайте fold або reduce для обчислень.
+def totalBooks(library: Library): Int = library.books.foldLeft(0)((count, _) => count + 1)
+Використовуйте конструкцію Either для обробки помилкових операцій.
+def borrowBook(library: Library, bookId: String, reader: Reader): Either[String, (Library, Reader)] = {
+  library.books.find(_.id == bookId) match {
+    case Some(book) if book.isAvailable =>
+      val updatedLibrary = new Library(library.books.map {
+        case b if b.id == bookId => b.copy(isAvailable = false)
+        case b => b
+      })
+      val updatedReader = reader.copy(borrowedBooks = reader.borrowedBooks :+ book)
+      Right((updatedLibrary, updatedReader))
+    case Some(book) => Left(s"Book '${book.title}' is not available.")
+    case None => Left("Book not found.")
+  }
+}
+Перевірка роботи та тестування
+Додайте тести за допомогою ScalaTest
+import org.scalatest.funsuite.AnyFunSuite
+
+class LibraryTest extends AnyFunSuite {
+  test("findBookByTitle should find a valid book") {
+    val library = new Library(List(Book("1", "Scala for Beginners", "John Doe", true)))
+    assert(LibraryUtils.findBookByTitle(library, "Scala for Beginners").isDefined)
+  }
+}
+Дедлайн (зробити і захистити): 26.11.2026 18:00
+
+Максимальна оцінка – 10 балів.
+
+Варіант 15: Система управління подіями
+
+Моделює організацію подій:
+
+Події, учасники, квитки.
+Список заходів, статистика по відвідувачам.
+Планування доходів з далекоглядними прогнозами.
