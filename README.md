@@ -11,6 +11,10 @@ An immutable event-ticketing and analytics application written in Scala 3. It mo
 - Calculates ticket revenue, capacity-weighted occupancy, and a simple revenue forecast.
 - Includes tests for purchases, validation, pricing, immutability, and analytics.
 
+## Functional programming concepts
+
+The project keeps domain data immutable: operations such as buying a ticket return an updated `EventManager` instead of changing the existing one. Collection operations such as `map`, `filter`, `flatMap`, and `foldLeft` handle event updates and analytics. `Option` represents searches that may not find an event, while `Either` returns typed validation and purchase errors. Pricing rules are composed from traits, demonstrating Scala trait linearization; a monoid combines individual financial reports into a global report.
+
 ## Run
 
 Requirements: Java 17 or newer and sbt 2.0.8 (pinned in `project/build.properties`).
