@@ -5,24 +5,24 @@ trait Identifiable {
 }
 
 trait PriceCalculator {
-  def calculatePrice(basePrice: Double): Double
+  def calculatePrice(basePrice: BigDecimal): BigDecimal
 }
 
 trait StandardPrice extends PriceCalculator {
-  def calculatePrice(basePrice: Double): Double = basePrice
+  def calculatePrice(basePrice: BigDecimal): BigDecimal = basePrice
 }
 
 trait StudentDiscount extends PriceCalculator {
-  abstract override def calculatePrice(basePrice: Double): Double = 
-    super.calculatePrice(basePrice) * 0.8 // 20% знижка
+  abstract override def calculatePrice(basePrice: BigDecimal): BigDecimal =
+    super.calculatePrice(basePrice) * BigDecimal("0.8")
 }
 
 trait VipMarkup extends PriceCalculator {
-  abstract override def calculatePrice(basePrice: Double): Double = 
-    super.calculatePrice(basePrice) * 1.5 // 50% націнка
+  abstract override def calculatePrice(basePrice: BigDecimal): BigDecimal =
+    super.calculatePrice(basePrice) * BigDecimal("1.5")
 }
 
 trait ServiceFee extends PriceCalculator {
-  abstract override def calculatePrice(basePrice: Double): Double = 
-    super.calculatePrice(basePrice) + 50.0 // фіксований збір
+  abstract override def calculatePrice(basePrice: BigDecimal): BigDecimal =
+    super.calculatePrice(basePrice) + BigDecimal("50.00")
 }

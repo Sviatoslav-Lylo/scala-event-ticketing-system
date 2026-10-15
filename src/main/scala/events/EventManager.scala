@@ -41,29 +41,35 @@ class EventManager(
         if (!event.isAvailable) {
           Left(SoldOut(eventId))
         } else {
-            val finalPrice = priceCalculator.calculatePrice(event.basePrice)
+            val finalPrice = priceCalculator
+              .calculatePrice(event.basePrice)
+              .setScale(2, BigDecimal.RoundingMode.HALF_UP)
 
-            val ticketId = s"T-${tickets.length + 1}"
+            if (finalPrice < 0) {
+              Left(InvalidData("Розрахована ціна не може бути від'ємною"))
+            } else {
+              val ticketId = s"T-${tickets.length + 1}"
 
-            val ticket = Ticket(ticketId, eventId, participantId, tier, finalPrice)
+              val ticket = Ticket(ticketId, eventId, participantId, tier, finalPrice)
     
-            val updatedEvents = events.map {
-              case e if e.id == eventId => e.copy(soldTickets = e.soldTickets :+ ticket)
-              case e => e
+              val updatedEvents = events.map {
+                case e if e.id == eventId => e.copy(soldTickets = e.soldTickets :+ ticket)
+                case e => e
+              }
+    
+              val updatedParticipants = participants.map {
+                case p if p.id == participantId => p.copy(tickets = p.tickets :+ ticket)
+                case p => p
+              }
+    
+              val newManager = new EventManager(
+                updatedEvents,
+                updatedParticipants,
+                tickets :+ ticket
+              )
+    
+              Right((newManager, ticket))
             }
-    
-            val updatedParticipants = participants.map {
-              case p if p.id == participantId => p.copy(tickets = p.tickets :+ ticket)
-              case p => p
-            }
-    
-            val newManager = new EventManager(
-              updatedEvents,
-              updatedParticipants,
-              tickets :+ ticket
-            )
-    
-            Right((newManager, ticket))
         }
     }
   }
@@ -73,3 +79,10 @@ class EventManager(
       .filter(_.category == category)
       .flatMap(_.soldTickets)
 }
+
+
+/* def getTicketsByCategory(category: EventCategory): List[Ticket] =
+  for {
+    event <- events if event.category == category // Це працює як .filter
+    ticket <- event.soldTickets                   // Це працює як .flatMap
+  } yield ticket */

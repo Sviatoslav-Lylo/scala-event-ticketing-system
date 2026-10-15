@@ -26,7 +26,7 @@ case class Ticket(
     eventId: String,
     participantId: String,
     tier: TicketTier,
-    finalPrice: Double
+    finalPrice: BigDecimal
 ) extends Identifiable
 
 case class Participant(
@@ -41,7 +41,7 @@ case class Event(
     title: String,
     category: EventCategory,
     maxCapacity: Int,
-    basePrice: Double,
+    basePrice: BigDecimal,
     soldTickets: List[Ticket] = Nil
 ) extends Identifiable {
   def isAvailable: Boolean = soldTickets.length < maxCapacity
@@ -53,10 +53,21 @@ object Event {
       title: String,
       category: EventCategory,
       maxCapacity: Int,
-      basePrice: Double
+      basePrice: BigDecimal
   ): Either[DomainError, Event] = {
-    if (maxCapacity <= 0) Left(InvalidData("Місткість має бути більшою за 0"))
+    if (id.trim.isEmpty) Left(InvalidData("ID події не може бути порожнім"))
+    else if (title.trim.isEmpty) Left(InvalidData("Назва події не може бути порожньою"))
+    else if (maxCapacity <= 0) Left(InvalidData("Місткість має бути більшою за 0"))
     else if (basePrice < 0) Left(InvalidData("Ціна не може бути від'ємною"))
-    else Right(Event(id, title, category, maxCapacity, basePrice))
+    else
+      Right(
+        Event(
+          id,
+          title,
+          category,
+          maxCapacity,
+          basePrice.setScale(2, BigDecimal.RoundingMode.HALF_UP)
+        )
+      )
   }
 }
