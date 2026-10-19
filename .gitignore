@@ -6,6 +6,7 @@
 target/
 project/target/
 project/project/
+task.txt
 
 # Compiled Java/Scala classes
 *.class
