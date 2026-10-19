@@ -23,14 +23,14 @@ The project keeps domain data immutable: operations such as buying a ticket retu
 ├── project/
 │   └── build.properties
 └── src/
-│   ├── main/scala/events/
-│   │   ├── Analytics.scala
-│   │   ├── EventManager.scala
-│   │   ├── Main.scala
-│   │   ├── Models.scala
-│   │   └── Traits.scala
-│   └── test/scala/events/
-│       └── EventSystemSuite.scala
+    ├── main/scala/events/
+    │   ├── Analytics.scala
+    │   ├── EventManager.scala
+    │   ├── Main.scala
+    │   ├── Models.scala
+    │   └── Traits.scala
+    └── test/scala/events/
+        └── EventSystemSuite.scala
 ```
 
 - `Models.scala` defines events, participants, tickets, and domain errors.
